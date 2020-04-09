@@ -27,7 +27,7 @@ void Do_Movement();
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 bool keys[1024];
-GLfloat lastX = 400, lastY = 300;
+GLfloat lastX = 300, lastY = 300;
 bool firstMouse = true;
 
 GLfloat deltaTime = 0.0f;
@@ -81,8 +81,28 @@ int main() {
 
   // set up vertex data (and buffer(s)) and configure vertex attributes
   // ------------------------------------------------------------------
-  GLfloat vertices[] = {0.0f, 0.0f, 0.0f, 1.0f};
-  unsigned int indices[] = {0};
+  GLfloat vertices[] = {
+   0.0f,  0.0f,  0.0f, 1.0f,
+   0.5f,  0.0f,  0.0f, 1.0f,
+  -0.5f,  0.0f,  0.0f, 1.0f,
+   0.5f,  0.5f,  0.0f, 1.0f,
+  -0.5f,  0.5f,  0.0f, 1.0f,
+   0.5f, -0.5f,  0.0f, 1.0f,
+  -0.5f, -0.5f,  0.0f, 1.0f,
+   0.5f,  0.5f,  0.5f, 1.0f,
+  -0.5f,  0.5f,  0.5f, 1.0f,
+   0.5f, -0.5f,  0.5f, 1.0f,
+  -0.5f, -0.5f,  0.5f, 1.0f,
+   0.5f,  0.5f, -0.5f, 1.0f,
+  -0.5f,  0.5f, -0.5f, 1.0f,
+   0.5f, -0.5f, -0.5f, 1.0f,
+  -0.5f, -0.5f, -0.5f, 1.0f,
+   0.0f,  0.5f,  0.5f, 1.0f,
+   0.0f, -0.5f,  0.5f, 1.0f,
+   0.0f,  0.5f, -0.5f, 1.0f,
+   0.0f, -0.5f, -0.5f, 1.0f
+  };
+  unsigned int indices[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
   unsigned int VBO, VAO, EBO;
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -156,13 +176,13 @@ int main() {
     projection = glm::perspective(
         camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 10.0f);
     // Get the uniform locations
-    // GLint modelLoc = glGetUniformLocation(myShader.Program, "model");
-    // GLint viewLoc = glGetUniformLocation(myShader.Program, "view");
-    // GLint projLoc = glGetUniformLocation(myShader.Program, "projection");
+    GLint modelLoc = glGetUniformLocation(myShader.Program, "model");
+    GLint viewLoc = glGetUniformLocation(myShader.Program, "view");
+    GLint projLoc = glGetUniformLocation(myShader.Program, "projection");
     // Pass the matrices to the shader
-    // glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    // glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-    // glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
     GLint vertexColorLocation =
         glGetUniformLocation(myShader.Program, "ourColor");
@@ -171,7 +191,7 @@ int main() {
         VAO); // seeing as we only have a single VAO there's no need to bind it
               // every time, but we'll do so to keep things a bit more organized
     // glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElements(GL_POINTS, 1000, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_POINTS, 20, GL_UNSIGNED_INT, 0);
     // glBindVertexArray(0); // no need to unbind it every time
 
     // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved
